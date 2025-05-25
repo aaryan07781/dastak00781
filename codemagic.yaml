@@ -1,0 +1,25 @@
+workflows:
+  android-app:
+    name: Android App Build
+    max_build_duration: 60
+    environment:
+      java: 11
+      android_signing:
+        - keystore_reference
+      groups:
+        - google_play
+      vars:
+        PACKAGE_NAME: "com.aaryan7.dastakmobile"
+    scripts:
+      - name: Set up local properties
+        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Build Android app
+        script: |
+          ./gradlew assembleRelease
+    artifacts:
+      - app/build/outputs/apk/release/app-release.apk
+      - app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
